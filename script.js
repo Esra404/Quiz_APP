@@ -50,3 +50,55 @@ const submitBtn = document.getElementById("submit");
 
 let currentQuiz = 0;
 let score = 0;
+loadQuiz();
+
+function loadQuiz() {
+    deselectAnswers();
+
+    const currentQuizData = quizData[currentQuiz];
+
+    questionEl.innerText = currentQuizData.question;
+    a_text.innerText = currentQuizData.a;
+    b_text.innerText = currentQuizData.b;
+    c_text.innerText = currentQuizData.c;
+    d_text.innerText = currentQuizData.d;
+}
+
+function getSelected() {
+    let answer = undefined;
+
+    answerEls.forEach((answerEl) => {
+        if (answerEl.checked) {
+            answer = answerEl.id;
+        }
+    });
+
+    return answer;
+}
+
+function deselectAnswers() {
+    answerEls.forEach((answerEl) => {
+        answerEl.checked = false;
+    });
+}
+
+submitBtn.addEventListener("click", () => {
+
+    const answer = getSelected();
+    console.log(answer)
+    if (answer) {
+        if (answer === quizData[currentQuiz].correct) {
+            score++;
+        }
+        currentQuiz++;
+        if (currentQuiz < quizData.length) {
+            loadQuiz();
+        } else {
+            quiz.innerHTML = `
+                <h3>Tebrikler doğru sayınız : ${score}/${quizData.length} </h3>
+                
+                <button onclick="location.reload()">Tekrar dene</button>
+            `;
+        }
+    }
+});
